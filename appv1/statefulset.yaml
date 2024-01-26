@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: express-app-ss
+spec:
+  clusterIP: None
+  selector:
+    app: express-app-ss
+  ports:
+  - protocol: TCP
+    port: 3000
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: express-app-ss
+spec:
+  serviceName: "express-app-ss"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: express-app-ss
+  template:
+    metadata:
+      labels:
+        app: express-app-ss
+    spec:
+      containers:
+      - name: express-app-ss
+        image: csuvikg/k8sdeploymenttest:v1
+        ports:
+        - containerPort: 3000
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

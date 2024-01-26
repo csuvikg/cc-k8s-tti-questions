@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-app-v3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: express-app-v3
+  template:
+    metadata:
+      labels:
+        app: express-app-v3
+    spec:
+      containers:
+      - name: express-app-v3
+        image: csuvikg/k8sdeploymenttest:v3
+        env:
+        - name: STARTUP_TIME
+          value: '10'
+        - name: TIMEOUT_TIME
+          value: '600'
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "10000Mi"
+          limits:
+            memory: "20000Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000

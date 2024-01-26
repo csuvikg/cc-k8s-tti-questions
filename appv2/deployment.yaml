@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-app-v2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: express-app-v2
+  template:
+    metadata:
+      labels:
+        app: express-app-v2
+    spec:
+      containers:
+      - name: express-app-v2
+        image: csuvikg/k8sdeploymenttest:v2
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "100Mi"
+          limits:
+            memory: "200Mi"
